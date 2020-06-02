@@ -7,8 +7,7 @@
 #
 #-------------------------------------------------------------------------------
 from __future__ import division
-from Tkinter import *
-import tkMessageBox
+import tkinter as tk
 from PIL import Image, ImageTk
 import os
 import glob
@@ -24,9 +23,9 @@ class LabelTool():
         # set up the main frame
         self.parent = master
         self.parent.title("LabelTool")
-        self.frame = Frame(self.parent)
-        self.frame.pack(fill=BOTH, expand=1)
-        self.parent.resizable(width = FALSE, height = FALSE)
+        self.frame = tk.Frame(self.parent)
+        self.frame.pack(fill=tk.BOTH, expand=1)
+        self.parent.resizable(width = tk.FALSE, height = tk.FALSE)
 
         # initialize global state
         self.imageDir = ''
@@ -55,62 +54,62 @@ class LabelTool():
 
         # ----------------- GUI stuff ---------------------
         # dir entry & load
-        self.label = Label(self.frame, text = "Image Dir:")
-        self.label.grid(row = 0, column = 0, sticky = E)
-        self.entry = Entry(self.frame)
-        self.entry.grid(row = 0, column = 1, sticky = W+E)
-        self.ldBtn = Button(self.frame, text = "Load", command = self.loadDir)
-        self.ldBtn.grid(row = 0, column = 2, sticky = W+E)
+        self.label = tk.Label(self.frame, text = "Image Dir:")
+        self.label.grid(row = 0, column = 0, sticky = tk.E)
+        self.entry = tk.Entry(self.frame)
+        self.entry.grid(row = 0, column = 1, sticky = tk.W+tk.E)
+        self.ldBtn = tk.Button(self.frame, text = "Load", command = self.loadDir)
+        self.ldBtn.grid(row = 0, column = 2, sticky = tk.W+tk.E)
 
         # main panel for labeling
-        self.mainPanel = Canvas(self.frame, cursor='tcross')
+        self.mainPanel = tk.Canvas(self.frame, cursor='tcross')
         self.mainPanel.bind("<Button-1>", self.mouseClick)
         self.mainPanel.bind("<Motion>", self.mouseMove)
         self.parent.bind("<Escape>", self.cancelBBox)  # press <Espace> to cancel current bbox
         self.parent.bind("s", self.cancelBBox)
         self.parent.bind("a", self.prevImage) # press 'a' to go backforward
         self.parent.bind("d", self.nextImage) # press 'd' to go forward
-        self.mainPanel.grid(row = 1, column = 1, rowspan = 4, sticky = W+N)
+        self.mainPanel.grid(row = 1, column = 1, rowspan = 4, sticky = tk.W+tk.N)
 
         # showing bbox info & delete bbox
-        self.lb1 = Label(self.frame, text = 'Bounding boxes:')
-        self.lb1.grid(row = 1, column = 2,  sticky = W+N)
-        self.listbox = Listbox(self.frame, width = 22, height = 12)
-        self.listbox.grid(row = 2, column = 2, sticky = N)
-        self.btnDel = Button(self.frame, text = 'Delete', command = self.delBBox)
-        self.btnDel.grid(row = 3, column = 2, sticky = W+E+N)
-        self.btnClear = Button(self.frame, text = 'ClearAll', command = self.clearBBox)
-        self.btnClear.grid(row = 4, column = 2, sticky = W+E+N)
+        self.lb1 = tk.Label(self.frame, text = 'Bounding boxes:')
+        self.lb1.grid(row = 1, column = 2,  sticky = tk.W+tk.N)
+        self.listbox = tk.Listbox(self.frame, width = 22, height = 12)
+        self.listbox.grid(row = 2, column = 2, sticky = tk.N)
+        self.btnDel = tk.Button(self.frame, text = 'Delete', command = self.delBBox)
+        self.btnDel.grid(row = 3, column = 2, sticky = tk.W+tk.E+tk.N)
+        self.btnClear = tk.Button(self.frame, text = 'ClearAll', command = self.clearBBox)
+        self.btnClear.grid(row = 4, column = 2, sticky = tk.W+tk.E+tk.N)
 
         # control panel for image navigation
-        self.ctrPanel = Frame(self.frame)
-        self.ctrPanel.grid(row = 5, column = 1, columnspan = 2, sticky = W+E)
-        self.prevBtn = Button(self.ctrPanel, text='<< Prev', width = 10, command = self.prevImage)
-        self.prevBtn.pack(side = LEFT, padx = 5, pady = 3)
-        self.nextBtn = Button(self.ctrPanel, text='Next >>', width = 10, command = self.nextImage)
-        self.nextBtn.pack(side = LEFT, padx = 5, pady = 3)
-        self.progLabel = Label(self.ctrPanel, text = "Progress:     /    ")
-        self.progLabel.pack(side = LEFT, padx = 5)
-        self.tmpLabel = Label(self.ctrPanel, text = "Go to Image No.")
-        self.tmpLabel.pack(side = LEFT, padx = 5)
-        self.idxEntry = Entry(self.ctrPanel, width = 5)
-        self.idxEntry.pack(side = LEFT)
-        self.goBtn = Button(self.ctrPanel, text = 'Go', command = self.gotoImage)
-        self.goBtn.pack(side = LEFT)
+        self.ctrPanel = tk.Frame(self.frame)
+        self.ctrPanel.grid(row = 5, column = 1, columnspan = 2, sticky = tk.W+tk.E)
+        self.prevBtn = tk.Button(self.ctrPanel, text='<< Prev', width = 10, command = self.prevImage)
+        self.prevBtn.pack(side = tk.LEFT, padx = 5, pady = 3)
+        self.nextBtn = tk.Button(self.ctrPanel, text='Next >>', width = 10, command = self.nextImage)
+        self.nextBtn.pack(side = tk.LEFT, padx = 5, pady = 3)
+        self.progLabel = tk.Label(self.ctrPanel, text = "Progress:     /    ")
+        self.progLabel.pack(side = tk.LEFT, padx = 5)
+        self.tmpLabel = tk.Label(self.ctrPanel, text = "Go to Image No.")
+        self.tmpLabel.pack(side = tk.LEFT, padx = 5)
+        self.idxEntry = tk.Entry(self.ctrPanel, width = 5)
+        self.idxEntry.pack(side = tk.LEFT)
+        self.goBtn = tk.Button(self.ctrPanel, text = 'Go', command = self.gotoImage)
+        self.goBtn.pack(side = tk.LEFT)
 
         # example pannel for illustration
-        self.egPanel = Frame(self.frame, border = 10)
-        self.egPanel.grid(row = 1, column = 0, rowspan = 5, sticky = N)
-        self.tmpLabel2 = Label(self.egPanel, text = "Examples:")
-        self.tmpLabel2.pack(side = TOP, pady = 5)
+        self.egPanel = tk.Frame(self.frame, border = 10)
+        self.egPanel.grid(row = 1, column = 0, rowspan = 5, sticky = tk.N)
+        self.tmpLabel2 = tk.Label(self.egPanel, text = "Examples:")
+        self.tmpLabel2.pack(side = tk.TOP, pady = 5)
         self.egLabels = []
-        for i in range(3):
-            self.egLabels.append(Label(self.egPanel))
-            self.egLabels[-1].pack(side = TOP)
+        for _ in range(3):
+            self.egLabels.append(tk.Label(self.egPanel))
+            self.egLabels[-1].pack(side = tk.TOP)
 
         # display mouse position
-        self.disp = Label(self.ctrPanel, text='')
-        self.disp.pack(side = RIGHT)
+        self.disp = tk.Label(self.ctrPanel, text='')
+        self.disp.pack(side = tk.RIGHT)
 
         self.frame.columnconfigure(1, weight = 1)
         self.frame.rowconfigure(4, weight = 1)
@@ -125,15 +124,15 @@ class LabelTool():
             self.parent.focus()
             self.category = int(s)
         else:
-            s = r'D:\workspace\python\labelGUI'
+            s = r'D:\workspace\python\labelGUI' # Lol windows :D
 ##        if not os.path.isdir(s):
-##            tkMessageBox.showerror("Error!", message = "The specified dir doesn't exist!")
+##            tk.messagebox.showerror("Error!", message = "The specified dir doesn't exist!")
 ##            return
         # get image list
         self.imageDir = os.path.join(r'./Images', '%03d' %(self.category))
         self.imageList = glob.glob(os.path.join(self.imageDir, '*.JPEG'))
         if len(self.imageList) == 0:
-            print 'No .JPEG images found in the specified dir!'
+            print('No .JPEG images found in the specified dir!')
             return
 
         # default to the 1st image in the collection
@@ -164,7 +163,7 @@ class LabelTool():
             self.egLabels[i].config(image = self.egList[-1], width = SIZE[0], height = SIZE[1])
 
         self.loadImage()
-        print '%d images loaded from %s' %(self.total, s)
+        print(f'{self.total} images loaded from {s}')
 
     def loadImage(self):
         # load image
@@ -172,7 +171,7 @@ class LabelTool():
         self.img = Image.open(imagepath)
         self.tkimg = ImageTk.PhotoImage(self.img)
         self.mainPanel.config(width = max(self.tkimg.width(), 400), height = max(self.tkimg.height(), 400))
-        self.mainPanel.create_image(0, 0, image = self.tkimg, anchor=NW)
+        self.mainPanel.create_image(0, 0, image = self.tkimg, anchor=tk.NW)
         self.progLabel.config(text = "%04d/%04d" %(self.cur, self.total))
 
         # load labels
@@ -195,7 +194,7 @@ class LabelTool():
                                                             width = 2, \
                                                             outline = COLORS[(len(self.bboxList)-1) % len(COLORS)])
                     self.bboxIdList.append(tmpId)
-                    self.listbox.insert(END, '(%d, %d) -> (%d, %d)' %(tmp[0], tmp[1], tmp[2], tmp[3]))
+                    self.listbox.insert(tk.END, '(%d, %d) -> (%d, %d)' %(tmp[0], tmp[1], tmp[2], tmp[3]))
                     self.listbox.itemconfig(len(self.bboxIdList) - 1, fg = COLORS[(len(self.bboxIdList) - 1) % len(COLORS)])
 
     def saveImage(self):
@@ -203,7 +202,7 @@ class LabelTool():
             f.write('%d\n' %len(self.bboxList))
             for bbox in self.bboxList:
                 f.write(' '.join(map(str, bbox)) + '\n')
-        print 'Image No. %d saved' %(self.cur)
+        print(f'Image No. {self.cur} saved')
 
 
     def mouseClick(self, event):
@@ -215,7 +214,7 @@ class LabelTool():
             self.bboxList.append((x1, y1, x2, y2))
             self.bboxIdList.append(self.bboxId)
             self.bboxId = None
-            self.listbox.insert(END, '(%d, %d) -> (%d, %d)' %(x1, y1, x2, y2))
+            self.listbox.insert(tk.END, '(%d, %d) -> (%d, %d)' %(x1, y1, x2, y2))
             self.listbox.itemconfig(len(self.bboxIdList) - 1, fg = COLORS[(len(self.bboxIdList) - 1) % len(COLORS)])
         self.STATE['click'] = 1 - self.STATE['click']
 
@@ -287,7 +286,7 @@ class LabelTool():
 ##        self.mainPanel.create_image(0, 0, image = self.tkimg, anchor=NW)
 
 if __name__ == '__main__':
-    root = Tk()
+    root = tk.Tk()
     tool = LabelTool(root)
     root.resizable(width =  True, height = True)
     root.mainloop()
