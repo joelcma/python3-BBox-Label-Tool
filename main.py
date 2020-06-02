@@ -66,9 +66,6 @@ class LabelTool():
         self.mainPanel.bind("<Button-1>", self.mouseClick)
         self.mainPanel.bind("<Motion>", self.mouseMove)
         self.parent.bind("<Escape>", self.cancelBBox)  # press <Espace> to cancel current bbox
-        self.parent.bind("s", self.cancelBBox)
-        self.parent.bind("a", self.prevImage) # press 'a' to go backforward
-        self.parent.bind("d", self.nextImage) # press 'd' to go forward
         self.mainPanel.grid(row = 1, column = 1, rowspan = 4, sticky = tk.W+tk.N)
 
         # showing bbox info & delete bbox
@@ -130,7 +127,8 @@ class LabelTool():
 ##            return
         # get image list
         self.imageDir = os.path.join(r'./Images', '%s' %(self.category))
-        self.imageList = glob.glob(os.path.join(self.imageDir, '*.JPEG'))
+        self.imageList = glob.glob(os.path.join(self.imageDir, '*.jpg'))
+        print("type of imageList:", type(self.imageList))
         if len(self.imageList) == 0:
             print('No .JPEG images found in the specified dir!')
             return
@@ -146,24 +144,27 @@ class LabelTool():
 
         # load example bboxes
         self.egDir = os.path.join(r'./Examples', '%s' %(self.category))
-        if not os.path.exists(self.egDir):
-            return
-        filelist = glob.glob(os.path.join(self.egDir, '*.JPEG'))
-        self.tmp = []
-        self.egList = []
-        random.shuffle(filelist)
-        for (i, f) in enumerate(filelist):
-            if i == 3:
-                break
-            im = Image.open(f)
-            r = min(SIZE[0] / im.size[0], SIZE[1] / im.size[1])
-            new_size = int(r * im.size[0]), int(r * im.size[1])
-            self.tmp.append(im.resize(new_size, Image.ANTIALIAS))
-            self.egList.append(ImageTk.PhotoImage(self.tmp[-1]))
-            self.egLabels[i].config(image = self.egList[-1], width = SIZE[0], height = SIZE[1])
+        if os.path.exists(self.egDir):
+            filelist = glob.glob(os.path.join(self.egDir, '*.JPEG'))
+            self.tmp = []
+            self.egList = []
+            random.shuffle(filelist)
+            for (i, f) in enumerate(filelist):
+                if i == 3:
+                    break
+                im = Image.open(f)
+                r = min(SIZE[0] / im.size[0], SIZE[1] / im.size[1])
+                new_size = int(r * im.size[0]), int(r * im.size[1])
+                self.tmp.append(im.resize(new_size, Image.ANTIALIAS))
+                self.egList.append(ImageTk.PhotoImage(self.tmp[-1]))
+                self.egLabels[i].config(image = self.egList[-1], width = SIZE[0], height = SIZE[1])
 
         self.loadImage()
         print(f'{self.total} images loaded from {s}')
+
+        self.parent.bind("s", self.cancelBBox)
+        self.parent.bind("a", self.prevImage) # press 'a' to go backforward
+        self.parent.bind("d", self.nextImage) # press 'd' to go forward
 
     def loadImage(self):
         # load image
