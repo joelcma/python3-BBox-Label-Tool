@@ -1,5 +1,7 @@
-BBox-Label-Tool
+BBox-Label-Tool (python3)
 ===============
+
+I (joelcma) didn't make this tool. puzzledqs did. I wanted a python3 version for it though. If I feel like I need some changes I might make those and I'll try to document the changes as well as possible but as of right now (6th of June, 2020) this is the same exact tool as it was before I started poking.
 
 A simple tool for labeling object bounding boxes in images, implemented with Python Tkinter.
 
